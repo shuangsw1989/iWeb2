@@ -47,21 +47,26 @@ public class RatingCountMatrix implements Serializable {
 
 	public RatingCountMatrix(Item itemA, Item itemB, int nRatingValues) {
 		init(nRatingValues);
-		calculate(itemA, itemB);
+		calculate(itemA, itemB);//计算基于条目的相似度
 	}
 
 	public RatingCountMatrix(User userA, User userB, int nRatingValues) {
 		init(nRatingValues);
-		calculate(userA, userB);
+		calculate(userA, userB);//计算基于用户的相似度
 	}
-
+	private void init(int nSize) {
+		// 开始点---所有的元素都为0
+		matrix = new int[nSize][nSize];
+	}
+	
+	
 	/*
 	 * Populates matrix using user ratings for provided items. We only consider
 	 * users that rated both items.
 	 */
-	private void calculate(Item itemA, Item itemB) {
+	private void calculate(Item itemA, Item itemB) {//计算基于条目的相似度
 		for (Rating ratingForA : itemA.getAllRatings()) {
-			// check if the same user rated itemB
+			// 检查是否有相同的用户给条目A和条目B都打了分
 			Rating ratingForB = itemB.getUserRating(ratingForA.getUserId());
 			if (ratingForB != null) {
 				// element in the matrix is determined by the rating values.
@@ -75,7 +80,7 @@ public class RatingCountMatrix implements Serializable {
 	/*
 	 * Populates matrix using ratings for items that the two users share.
 	 */
-	private void calculate(User userA, User userB) {
+	private void calculate(User userA, User userB) {//计算基于用户的相似度
 
 		for (Rating ratingByA : userA.getAllRatings()) {
 
@@ -89,7 +94,10 @@ public class RatingCountMatrix implements Serializable {
 			}
 		}
 	}
-
+/**
+ * 不同计数器的辅助方法
+ * @return
+ */
 	public int getAgreementCount() {
 		int ratingCount = 0;
 		for (int i = 0, n = matrix.length; i < n; i++) {
@@ -124,8 +132,5 @@ public class RatingCountMatrix implements Serializable {
 		return ratingCount;
 	}
 
-	private void init(int nSize) {
-		// starting point - all elements are zero
-		matrix = new int[nSize][nSize];
-	}
+	
 }

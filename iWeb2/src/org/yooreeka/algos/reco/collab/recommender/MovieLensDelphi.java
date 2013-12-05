@@ -291,19 +291,22 @@ public class MovieLensDelphi implements Recommender {
 		}
 		return recommendedItems;
 	}
-
+/**
+ * 基于用户相似度产生推荐
+ */
 	public List<PredictedItemRating> recommend(User user, int topN) {
 
 		List<PredictedItemRating> recommendations = new ArrayList<PredictedItemRating>();
 
-		for (Item item : dataSet.getItems()) {
+		for (Item item : dataSet.getItems()) {//遍历所有条目
 
-			// only consider items that user hasn't rated yet
+			// 只考虑该用户还未评分的条目
 			if (user.getItemRating(item.getId()) == null) {
 
-				double predictedRating = estimateItemBasedRating(user, item);
+				double predictedRating = estimateItemBasedRating(user, item);//为这名用户预测评分
 
 				if (!Double.isNaN(predictedRating)) {
+					//把候选推荐的预测分值累加起来
 					recommendations.add(new PredictedItemRating(user.getId(),
 							item.getId(), predictedRating));
 				}

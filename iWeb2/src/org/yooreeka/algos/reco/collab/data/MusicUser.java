@@ -81,28 +81,27 @@ public class MusicUser extends User {
 		switch (simType) {
 
 		case 0:
-			for (Rating r : this.ratingsByItemId.values()) {
+			for (Rating r : this.ratingsByItemId.values()) {//辨识所有共同的条目
 				for (Rating r2 : u.ratingsByItemId.values()) {
 
-					// Find the same item
+					// 找到相同条目
 					if (r.getItemId() == r2.getItemId()) {
 						commonItems++;
+						//对评分的差的平方求和
 						sim += Math.pow((r.getRating() - r2.getRating()), 2);
 					}
 				}
 			}
 
-			// If there are not common items, we cannot tell whether
-			// the users are similar or not. So, we let it return 0.
+			// 若无相同条目，就无法分辨两个用户是否相似，则返回0
 			if (commonItems > 0) {
 
 				// This is the RMSE, which is more like the distance
 				sim = Math.sqrt(sim / commonItems);
 
-				// Similarity should be between 0 and 1
-				// For the value 0, the two users are as dissimilar as they come
-				// For the value 1, their preferences (based on the available
-				// data) are identical.
+				// 相似度介于0-1之间
+				// 0表示两用户完全不相似
+				//1表示两用户爱好一致
 				//
 				// Here is a function that accomplishes exactly that
 				sim = 1.0d - Math.tanh(sim);
@@ -112,27 +111,25 @@ public class MusicUser extends User {
 
 		// ---------------------------------------------------------
 		case 1:
-			for (Rating r : this.ratingsByItemId.values()) {
+			for (Rating r : this.ratingsByItemId.values()) {//辨识所有共同的条目
 				for (Rating r2 : u.ratingsByItemId.values()) {
 
-					// Find the same item
+					// 找到相同条目
 					if (r.getItemId() == r2.getItemId()) {
 						commonItems++;
-						sim += Math.pow((r.getRating() - r2.getRating()), 2);
+						sim += Math.pow((r.getRating() - r2.getRating()), 2);//对评分的差的平方求和
 					}
 				}
 			}
 
-			// If there are not common items, we cannot tell whether
-			// the users are similar or not. So, we let it return 0.
+			// 若无相同条目，就无法分辨两个用户是否相似，则返回0
 			if (commonItems > 0) {
 				// Same as before (case 0)
 				sim = Math.sqrt(sim / commonItems);
 
-				// Similarity should be between 0 and 1
-				// For the value 0, the two users are as disimilar as they come
-				// For the value 1, their preferences (based on the available
-				// data) are identical.
+				// 相似度介于0-1之间
+				// 0表示两用户完全不相似
+				//1表示两用户爱好一致
 				//
 				// Here is a function that accomplishes exactly that
 				sim = 1.0d - Math.tanh(sim);
@@ -143,15 +140,11 @@ public class MusicUser extends User {
 				// in common
 				// So, let us consider the following
 
-				// This is the maximum number of items that the two users can
-				// have in common
+				// 算出两用户间最大可能相同的条目
 				int maxCommonItems = Math.min(this.ratingsByItemId.size(),
 						u.ratingsByItemId.size());
 
-				// Adjust the similarity to account for the importance of the
-				// common terms
-				// through the ratio of the common items over the number of all
-				// possible common items
+				// 考虑相同条目的重要性，以相同条目与最大可能相同条目的比值最为相似度
 
 				sim = sim * ((double) commonItems / (double) maxCommonItems);
 			}
@@ -159,14 +152,14 @@ public class MusicUser extends User {
 			break;
 		}
 
-		// Let us know what it is
-		System.out.print("\n"); // Just for pretty printing in the Shell
+		// 打印结果信息
+		System.out.print("\n"); // 只是为了使Shell输出格式更美
 		System.out.print(" User Similarity between");
 		System.out.print(" " + this.getName());
 		System.out.print(" and " + u.getName());
 		System.out.println(" is equal to " + sim);
-		System.out.print("\n"); // Just for pretty printing in the Shell
-
+		System.out.print("\n"); // 只是为了使Shell输出格式更美
+ 
 		return sim;
 	}
 

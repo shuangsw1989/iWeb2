@@ -62,8 +62,8 @@ public class UserBasedSimilarity extends SimilarityMatrixImpl {
 	@Override
 	protected void calculate(Dataset dataSet) {
 
-		int nUsers = dataSet.getUserCount();
-		int nRatingValues = 5;
+		int nUsers = dataSet.getUserCount();//定义相似度矩阵的规模
+		int nRatingValues = 5;//定义评分计数矩阵的规模
 
 		similarityValues = new double[nUsers][nUsers];
 
@@ -71,8 +71,7 @@ public class UserBasedSimilarity extends SimilarityMatrixImpl {
 			ratingCountMatrix = new RatingCountMatrix[nUsers][nUsers];
 		}
 
-		// if we want to use mapping from userId to index then generate
-		// index for every userId
+		// 如果需要从用户Id到下标索引的映射，则为每个用户生成索引
 		if (useObjIdToIndexMapping) {
 			for (User u : dataSet.getUsers()) {
 				idMapping.getIndex(String.valueOf(u.getId()));
@@ -84,18 +83,18 @@ public class UserBasedSimilarity extends SimilarityMatrixImpl {
 			int userAId = getObjIdFromIndex(u);
 			User userA = dataSet.getUser(userAId);
 
-			for (int v = u + 1; v < nUsers; v++) {
+			for (int v = u + 1; v < nUsers; v++) {//相似度矩阵
 
 				int userBId = getObjIdFromIndex(v);
 				User userB = dataSet.getUser(userBId);
 
 				RatingCountMatrix rcm = new RatingCountMatrix(userA, userB,
-						nRatingValues);
+						nRatingValues);//两个用户评分的一般性矩阵
 
 				int totalCount = rcm.getTotalCount();
 				int agreementCount = rcm.getAgreementCount();
 
-				if (agreementCount > 0) {
+				if (agreementCount > 0) {//计算相似度或把它置为0
 
 					similarityValues[u][v] = (double) agreementCount
 							/ (double) totalCount;
@@ -103,15 +102,15 @@ public class UserBasedSimilarity extends SimilarityMatrixImpl {
 					similarityValues[u][v] = 0.0;
 				}
 
-				// For large datasets
+				// 对大数据集的处理
 				if (keepRatingCountMatrix) {
 					ratingCountMatrix[u][v] = rcm;
 				}
 			}
 
-			// for u == v assign 1.
-			// RatingCountMatrix wasn't created for this case
-			similarityValues[u][u] = 1.0;
+			// 对于u==v的情况，赋值为1
+			// 此时不会创建RatingCountMatrix
+			similarityValues[u][u] = 1.0;//相似度矩阵
 		}
 	}
 }

@@ -40,13 +40,14 @@ delphi.findSimilarUsers(mu2);
 delphi.recommend(mu1);
 
 //------------------------------------------------------------------------
-//BaseDataset ds = MusicData.createDataset();
-//ds.save(yHome+"/data/ch03/dataset_script_2.ser");
-//Delphi delphi = new Delphi(ds,RecommendationType.USER_BASED);
+//BaseDataset ds = MusicData.createDataset();//创建音乐数据集
+//ds.save(yHome+"/data/ch03/dataset_script_2.ser");//保存它以备后用
+//Delphi delphi = new Delphi(ds,RecommendationType.USER_BASED);//创建推荐引擎
+//找到相似用户
 //delphi.setVerbose(true);
 //MusicUser mu1 = ds.pickUser("Bob");
 //delphi.findSimilarUsers(mu1);
 //MusicUser mu2 = ds.pickUser("John");
 //delphi.findSimilarUsers(mu2);
-//delphi.recommend(mu1);
+//delphi.recommend(mu1);//推荐一些歌曲
 //------------------------------------------------------------------------

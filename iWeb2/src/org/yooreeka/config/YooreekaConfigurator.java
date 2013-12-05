@@ -97,11 +97,14 @@ public class YooreekaConfigurator {
 
 		String logLevel = getLogProperty("log.level." + cName);
 
+//		System.out.println("dsd"+logLevel);
 		if (logLevel == null)
 			logLevel = LOG_LEVEL_WARNING;
 
 		Level l = null;
-
+		l = Level.INFO;
+		return l;
+/*
 		switch (logLevel) {
 		case LOG_LEVEL_SEVERE:
 			l = Level.SEVERE;
@@ -128,7 +131,7 @@ public class YooreekaConfigurator {
 			l = Level.WARNING;
 			break;
 		}
-		return l;
+		return l;*/
 	}
 
 	public static String getLogProperty(String key) {
